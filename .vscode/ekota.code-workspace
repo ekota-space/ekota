@@ -1,0 +1,28 @@
+{
+  "folders": [
+    {
+      "path": ".."
+    },
+    {
+      "path": "../../zero"
+    }
+  ],
+  "settings": {
+    "cSpell.words": [
+      "ekota",
+      "pkgs",
+      "Zitadel",
+      "ZITADEL"
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "biomejs.biome",
+      "golang.go"
+    ],
+    "unwantedRecommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint"
+    ]
+  }
+}

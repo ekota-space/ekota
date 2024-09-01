@@ -1,10 +1,8 @@
-import { Alert, Button } from "flowbite-react";
+import { authOptions } from "@/collections/auth";
+import { getServerSession } from "next-auth";
+import LoginButton from "./modules/root/LoginButton";
 
-export default function Home() {
-  return (
-    <main>
-      <Alert color="info">Alert!</Alert>
-      <Button>Button</Button>
-    </main>
-  );
+export default async function Home() {
+	const session = await getServerSession(authOptions);
+	return <main>{session ? <p>Authenticated</p> : <LoginButton />}</main>;
 }
