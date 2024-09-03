@@ -13,7 +13,8 @@
       "pkgs",
       "Zitadel",
       "ZITADEL"
-    ]
+    ],
+    "biome.lspBin": ""
   },
   "extensions": {
     "recommendations": [
