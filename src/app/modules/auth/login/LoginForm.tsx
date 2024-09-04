@@ -7,10 +7,14 @@ import TextFormInput from "@/components/form/TextFormInput";
 import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordFormInput from "@/components/form/PasswordFormInput";
+import Link from "next/link";
 
 const loginFormFieldValidator = zod.object({
 	email: zod.string().email(),
-	password: zod.string().min(8).max(20),
+	password: zod
+		.string()
+		.min(8, "Password must be at least 8 characters long")
+		.max(20, "Password must be below 20 characters"),
 });
 
 type LoginFormFields = zod.infer<typeof loginFormFieldValidator>;
@@ -52,6 +56,9 @@ const LoginForm = () => {
 					name="password"
 					placeholder="8-20 characters long password"
 				/>
+				<Link href="/auth/password/reset" className="underline text-end">
+					Forgot password?
+				</Link>
 
 				<Button type="submit" className="mt-4">
 					Log In
