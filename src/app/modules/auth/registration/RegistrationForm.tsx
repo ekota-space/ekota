@@ -10,6 +10,18 @@ import zod from "zod";
 
 const registrationFormFieldValidator = zod
 	.object({
+		firstName: zod
+			.string()
+			.min(2, "First name must be at least 2 characters long"),
+		lastName: zod
+			.string()
+			.min(2, "Last name must be at least 2 characters long"),
+		username: zod
+			.string()
+			.min(6, "Username must be at least 6 characters long")
+			.max(16, "Username must be below 16 characters")
+			.regex(/^[a-zA-Z0-9_]+$/, "Only a-z A-Z 0-9 and _ are allowed"),
+
 		email: zod.string().email(),
 		password: zod
 			.string()
@@ -34,11 +46,6 @@ type RegistrationFormFields = zod.infer<typeof registrationFormFieldValidator>;
 
 function RegistrationForm() {
 	const form = useForm<RegistrationFormFields>({
-		defaultValues: {
-			email: "",
-			password: "",
-			confirmPassword: "",
-		},
 		resolver: zodResolver(registrationFormFieldValidator),
 	});
 
@@ -50,10 +57,25 @@ function RegistrationForm() {
 		<FormProvider {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-col justify-center"
+				className="flex flex-col justify-center gap-2"
 			>
-				<div className="mb-2 block">
-					<Label htmlFor="email1" value="Your email" />
+				<div className="flex flex-col md:flex-row gap-2">
+					<div className="w-full">
+						<div className="block">
+							<Label htmlFor="firstName" value="First name" />
+						</div>
+						<TextFormInput id="firstName" name="firstName" placeholder="John" />
+					</div>
+					<div className="w-full">
+						<div className="block">
+							<Label htmlFor="lastName" value="Last name" />
+						</div>
+						<TextFormInput id="lastName" name="lastName" placeholder="Doe" />
+					</div>
+				</div>
+
+				<div className="block">
+					<Label htmlFor="email" value="Your email" />
 				</div>
 				<TextFormInput
 					id="email"
@@ -62,7 +84,12 @@ function RegistrationForm() {
 					placeholder="name@email.com"
 				/>
 
-				<div className="mb-2 block">
+				<div className="block">
+					<Label htmlFor="username" value="Username" />
+				</div>
+				<TextFormInput id="username" name="username" placeholder="john_doe" />
+
+				<div className="block">
 					<Label htmlFor="password" value="Your Password" />
 				</div>
 				<PasswordFormInput
@@ -70,7 +97,7 @@ function RegistrationForm() {
 					name="password"
 					placeholder="8-20 characters long password"
 				/>
-				<div className="mb-2 block">
+				<div className="block">
 					<Label htmlFor="confirmPassword" value="Confirm your password" />
 				</div>
 				<PasswordFormInput

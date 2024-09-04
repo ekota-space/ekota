@@ -6,7 +6,7 @@ import React from "react";
 function RegisterPage() {
 	return (
 		<main className="h-screen flex justify-center items-center">
-			<Card className="w-full max-w-sm">
+			<Card className="w-full max-w-md">
 				<h2 className="text-2xl font-semibold">Get started</h2>
 				<RegistrationForm />
 				<p>

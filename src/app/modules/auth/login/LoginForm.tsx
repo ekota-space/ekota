@@ -21,10 +21,6 @@ type LoginFormFields = zod.infer<typeof loginFormFieldValidator>;
 
 const LoginForm = () => {
 	const form = useForm<LoginFormFields>({
-		defaultValues: {
-			email: "",
-			password: "",
-		},
 		resolver: zodResolver(loginFormFieldValidator),
 	});
 
@@ -39,7 +35,7 @@ const LoginForm = () => {
 				className="flex flex-col justify-center"
 			>
 				<div className="mb-2 block">
-					<Label htmlFor="email1" value="Your email" />
+					<Label htmlFor="email" value="Your email" />
 				</div>
 				<TextFormInput
 					id="email"

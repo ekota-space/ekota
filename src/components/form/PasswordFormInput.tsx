@@ -13,13 +13,13 @@ const PasswordFormInput: typeof TextFormInput = forwardRef(
 				ref={ref}
 				type={hidden ? "password" : "text"}
 				onCopy={(e) => e.preventDefault()}
-        onCut={(e) => e.preventDefault()}
+				onCut={(e) => e.preventDefault()}
 				rightIcon={() => {
 					return (
 						<Button
 							type="button"
 							color="transparent"
-              className="w-5"
+							className="w-5 dark:text-white"
 							onClick={() => setHidden(!hidden)}
 						>
 							{hidden ? <PiEyeDuotone /> : <PiEyeClosedDuotone />}
