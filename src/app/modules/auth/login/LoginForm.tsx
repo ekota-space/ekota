@@ -8,6 +8,8 @@ import zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordFormInput from "@/components/form/PasswordFormInput";
 import Link from "next/link";
+import useAuthLogin from "@/services/swr/auth/login";
+import { useRouter } from "next/navigation";
 
 const loginFormFieldValidator = zod.object({
 	email: zod.string().email(),
@@ -20,12 +22,17 @@ const loginFormFieldValidator = zod.object({
 type LoginFormFields = zod.infer<typeof loginFormFieldValidator>;
 
 const LoginForm = () => {
+	const router = useRouter();
+	const { trigger, error } = useAuthLogin();
+
 	const form = useForm<LoginFormFields>({
 		resolver: zodResolver(loginFormFieldValidator),
 	});
 
-	const onSubmit: SubmitHandler<LoginFormFields> = (data) => {
-		console.log(data);
+	const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
+		await trigger(data);
+		form.reset();
+		router.push("/");
 	};
 
 	return (
@@ -56,7 +63,17 @@ const LoginForm = () => {
 					Forgot password?
 				</Link>
 
-				<Button type="submit" className="mt-4">
+				{error ? (
+					<span className="text-red-500">
+						{(error.response?.data as { error: string })?.error ?? error.message}
+					</span>
+				) : null}
+
+				<Button
+					type="submit"
+					className="mt-4"
+					isProcessing={form.formState.isSubmitting}
+				>
 					Log In
 				</Button>
 			</form>

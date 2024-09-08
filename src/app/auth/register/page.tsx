@@ -1,9 +1,17 @@
 import RegistrationForm from "@/app/modules/auth/registration/RegistrationForm";
+import { apiService } from "@/services/api/api";
 import { Card } from "flowbite-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-function RegisterPage() {
+async function RegisterPage() {
+	const { data: user } = await apiService.user.me();
+
+	if (user) {
+		redirect("/");
+	}
+
 	return (
 		<main className="h-screen flex justify-center items-center">
 			<Card className="w-full max-w-md">

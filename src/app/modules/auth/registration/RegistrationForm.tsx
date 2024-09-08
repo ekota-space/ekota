@@ -2,8 +2,11 @@
 
 import PasswordFormInput from "@/components/form/PasswordFormInput";
 import TextFormInput from "@/components/form/TextFormInput";
+import useAuthRegister from "@/services/swr/auth/register";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import { Label, Button } from "flowbite-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import zod from "zod";
@@ -45,12 +48,29 @@ const registrationFormFieldValidator = zod
 type RegistrationFormFields = zod.infer<typeof registrationFormFieldValidator>;
 
 function RegistrationForm() {
+	const router = useRouter();
+	const { trigger } = useAuthRegister();
+
 	const form = useForm<RegistrationFormFields>({
 		resolver: zodResolver(registrationFormFieldValidator),
 	});
 
-	const onSubmit: SubmitHandler<RegistrationFormFields> = (data) => {
-		console.log(data);
+	const onSubmit: SubmitHandler<RegistrationFormFields> = async (data) => {
+		try {
+			await trigger(data);
+			form.reset();
+			router.push("/");
+		} catch (error) {
+			if (error instanceof AxiosError && error.status === 400) {
+				form.setError(
+					error.response?.data.error === "Username already exists"
+						? "username"
+						: "email",
+					{ message: error.response?.data.error },
+					{ shouldFocus: true },
+				);
+			}
+		}
 	};
 
 	return (
@@ -106,7 +126,11 @@ function RegistrationForm() {
 					placeholder="8-20 characters long password"
 				/>
 
-				<Button type="submit" className="mt-4">
+				<Button
+					type="submit"
+					className="mt-4"
+					isProcessing={form.formState.isSubmitting}
+				>
 					Register
 				</Button>
 			</form>
