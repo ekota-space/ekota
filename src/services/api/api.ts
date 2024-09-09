@@ -2,7 +2,6 @@ import { Env } from "@/collections/env";
 import axios from "axios";
 import AuthEndpoint from "./auth";
 import UserEndpoint from "./user";
-import { isBrowser } from "@/utils/is-browser";
 
 class ApiService {
 	auth!: AuthEndpoint;
@@ -13,16 +12,10 @@ class ApiService {
 	}
 
 	async #onInit(): Promise<void> {
-		const headers = isBrowser()
-			? undefined
-			: Object.fromEntries(
-					await import("next/headers").then((s) => s.headers().entries()),
-				);
 
 		const client = axios.create({
 			baseURL: Env.API_URI,
 			withCredentials: true,
-			headers,
 		});
 
 		this.auth = new AuthEndpoint(client);

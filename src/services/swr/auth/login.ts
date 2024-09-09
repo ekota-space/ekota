@@ -2,8 +2,8 @@ import useSWRMutation from "swr/mutation";
 import { SwrMutationKeys, SwrQueryKeys } from "../keys";
 import type { AxiosError } from "axios";
 import type { LoginUserInput } from "@/services/api/auth";
-import { apiService } from "@/services/api/api";
 import { useSWRConfig } from "swr";
+import { apiService } from "@/services/api/api";
 
 export default function useAuthLogin() {
 	const { mutate } = useSWRConfig();

@@ -1,6 +1,6 @@
 "use client";
 
-import { apiService } from "@/services/api/api";
+import { clientApiService } from "@/services/api/api";
 import { Button } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -10,7 +10,7 @@ function LogoutButton() {
 	return (
 		<Button
 			onClick={async () => {
-				await apiService.auth.logout();
+				await clientApiService.auth.logout();
         router.replace("/auth/login");
 			}}
 			color="warning"

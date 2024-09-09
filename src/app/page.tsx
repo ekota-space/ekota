@@ -4,8 +4,7 @@ import LogoutButton from "./modules/root/LogoutButton";
 
 export default async function Home() {
 	const { data: user } = await apiService.user.me();
-
-	console.log("user:", user);
+  
 	if (!user) {
 		redirect("/auth/login");
 	}

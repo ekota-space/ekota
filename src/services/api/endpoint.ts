@@ -1,3 +1,4 @@
+import { isBrowser } from "@/utils/is-browser";
 import type { AxiosInstance } from "axios";
 import type { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
@@ -14,5 +15,14 @@ export abstract class Endpoint {
 		}
 
 		return cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join("; ");
+	}
+
+	protected async defaultHeaders(): Promise<
+		Record<string, string> | undefined
+	> {
+		if (isBrowser()) return;
+		return Object.fromEntries(
+			await import("next/headers").then((s) => s.headers().entries()),
+		);
 	}
 }

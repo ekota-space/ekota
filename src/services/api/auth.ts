@@ -71,21 +71,24 @@ export default class AuthEndpoint extends Endpoint {
 			validateStatus: (status) => {
 				return status === 200 || status === 400;
 			},
+			headers: await this.defaultHeaders(),
 		});
 		return res;
 	}
 
 	async logout() {
-		await this.client.get("/auth/logout");
+		await this.client.get("/auth/logout", {
+			headers: await this.defaultHeaders(),
+		});
 	}
 
-  async updateGlobalHeaders() {
-    if(isBrowser()) return;
-    const headers = Object.fromEntries(
-					await import("next/headers").then((s) => s.headers().entries()),
-				)
-    this.client.defaults.headers.common = headers;
-  }
+	async updateGlobalHeaders() {
+		if (isBrowser()) return;
+		const headers = Object.fromEntries(
+			await import("next/headers").then((s) => s.headers().entries()),
+		);
+		this.client.defaults.headers.common = headers;
+	}
 
 	async login(data: LoginUserInput): Promise<void> {
 		const res = await this.client.post<AuthResponse>("/auth/login", data, {
@@ -95,7 +98,7 @@ export default class AuthEndpoint extends Endpoint {
 		});
 
 		this.refreshPeriodically(res.data.expirationDurationSeconds * 1000);
-    await this.updateGlobalHeaders();
+		await this.updateGlobalHeaders();
 	}
 
 	async register(data: RegisterUserInput): Promise<void> {
@@ -106,6 +109,6 @@ export default class AuthEndpoint extends Endpoint {
 		});
 
 		this.refreshPeriodically(res.data.expirationDurationSeconds * 1000);
-    await this.updateGlobalHeaders();
+		await this.updateGlobalHeaders();
 	}
 }
