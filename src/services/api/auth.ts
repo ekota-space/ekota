@@ -3,8 +3,8 @@ import { Endpoint } from "./endpoint";
 import type { AxiosInstance } from "axios";
 
 export interface RegisterUserInput {
-	firstName: string;
-	lastName: string;
+	first_name: string;
+	last_name: string;
 	username: string;
 	email: string;
 	password: string;

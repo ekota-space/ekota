@@ -10,13 +10,14 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import zod from "zod";
+import { omit } from "lodash-es";
 
 const registrationFormFieldValidator = zod
 	.object({
-		firstName: zod
+		first_name: zod
 			.string()
 			.min(2, "First name must be at least 2 characters long"),
-		lastName: zod
+		last_name: zod
 			.string()
 			.min(2, "Last name must be at least 2 characters long"),
 		username: zod
@@ -57,7 +58,7 @@ function RegistrationForm() {
 
 	const onSubmit: SubmitHandler<RegistrationFormFields> = async (data) => {
 		try {
-			await trigger(data);
+			await trigger(omit(data, "confirmPassword"));
 			form.reset();
 			router.push("/");
 		} catch (error) {
