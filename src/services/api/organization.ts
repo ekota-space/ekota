@@ -3,6 +3,7 @@ import { Endpoint } from "./endpoint";
 
 export interface CreateOrganizationInput {
 	name: string;
+  slug: string;
 	description?: string;
 	owner_id: string;
 }

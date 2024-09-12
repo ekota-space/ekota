@@ -5,6 +5,7 @@ import TextFormInput from "@/components/form/TextFormInput";
 import useOrganizationCreate from "@/services/swr/organization/create";
 import useMe from "@/services/swr/user/me";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import { Button, Label } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import React, { useCallback } from "react";
@@ -13,14 +14,19 @@ import zod from "zod";
 
 const organizationSchema = zod.object({
 	name: zod.string().min(3).max(255),
-	description: zod.string().min(3).max(255).optional(),
+	slug: zod
+		.string()
+		.min(3)
+		.max(16)
+		.regex(/^[a-z0-9_-]+$/i, "Slug can only contain a-z, 0-9, _ and -"),
+	description: zod.string().optional(),
 });
 
 type OrganizationFormFields = zod.infer<typeof organizationSchema>;
 
 function OrganizationForm() {
-  const router = useRouter();
-  
+	const router = useRouter();
+
 	const form = useForm<OrganizationFormFields>({
 		resolver: zodResolver(organizationSchema),
 	});
@@ -33,15 +39,28 @@ function OrganizationForm() {
 				return;
 			}
 
-			await mutation.trigger({
-				name: data.name,
-				description: data.description,
-				owner_id: me.data?.id,
-			});
+			try {
+				await mutation.trigger({
+					name: data.name,
+					slug: data.slug,
+					description: data.description,
+					owner_id: me.data?.id,
+				});
 
-      router.push("/");
+				router.push("/");
+			} catch (error) {
+				if (
+					error instanceof AxiosError &&
+					error.response?.data?.error === "Slug already exists"
+				) {
+					form.setError("slug", {
+						type: "manual",
+						message: "Slug already exists",
+					});
+				}
+			}
 		},
-		[me.data?.id, mutation.trigger, router.push],
+		[me.data?.id, mutation.trigger, router.push, form.setError],
 	);
 
 	return (
@@ -53,7 +72,20 @@ function OrganizationForm() {
 				<div className="mb-2 block">
 					<Label htmlFor="name" value="Organization's Name" />
 				</div>
-				<TextFormInput id="name" name="name" placeholder="Name of your organization" />
+				<TextFormInput
+					id="name"
+					name="name"
+					placeholder="Name of your organization"
+				/>
+
+				<div className="mb-2 block">
+					<Label htmlFor="slug" value="Organization's Slug" />
+				</div>
+				<TextFormInput
+					id="slug"
+					name="slug"
+					placeholder="Unique short name"
+				/>
 
 				<div className="mb-2 block">
 					<Label htmlFor="description" value="Organization's Description" />
@@ -62,7 +94,7 @@ function OrganizationForm() {
 					id="description"
 					name="description"
 					placeholder="What does the organization do?"
-          rows={5}
+					rows={5}
 				/>
 
 				<Button type="submit">Create</Button>

@@ -20,8 +20,10 @@ export default function useOrganizationCreate() {
 	return {
 		...mutation,
 		trigger: async (data: CreateOrganizationInput) => {
-			await mutation.trigger(data);
+			const result = await mutation.trigger(data);
 			await mutate(SwrQueryKeys.useOrganizationList);
+
+      return result;
 		},
 	};
 }

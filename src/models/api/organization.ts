@@ -3,6 +3,7 @@ import type { ApiUser } from "./user";
 export interface ApiOrganization {
 	id: string;
 	name: string;
+  slug: string;
 	created_at: string;
 	description: string;
 	updated_at: string;
