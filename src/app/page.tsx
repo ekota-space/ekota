@@ -1,9 +1,11 @@
 import { apiService } from "@/services/api/api";
 import { redirect } from "next/navigation";
 import LogoutButton from "./modules/root/LogoutButton";
+import OrganizationList from "./modules/root/OrganizationList";
+import { Card } from "flowbite-react";
+import { FaBuilding } from "react-icons/fa6";
 
 export default async function Home() {
-	const { data: user } = await apiService.user.me();
 	const orgs = await apiService.organization.list().catch(() => ({ data: [] }));
 
 	if (orgs.data.length === 0) {
@@ -12,13 +14,14 @@ export default async function Home() {
 
 	return (
 		<main>
-			{user ? (
-				<>
-					<LogoutButton />
-				</>
-			) : (
-				"Not logged in"
-			)}
+			<LogoutButton />
+			<Card className="mx-auto max-w-md">
+				<div className="flex gap-2 items-center text-xl">
+					<FaBuilding />
+					<h2>Your Organizations</h2>
+				</div>
+				<OrganizationList />
+			</Card>
 		</main>
 	);
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import OrganizationForm from "@/app/modules/auth/organization/OrganizationForm";
+import OrganizationForm from "@/app/modules/organization/OrganizationForm";
 import useOrganizationList from "@/services/swr/organization/list";
 import { Card } from "flowbite-react";
 import React from "react";
