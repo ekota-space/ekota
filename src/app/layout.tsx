@@ -10,14 +10,19 @@ export const metadata: Metadata = {
 		"A collaborative platform for remote teams with planning, chat, kanban, goals and more.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+
 	return (
 		<html lang="en">
-			<body className={`${inter.className} dark:text-gray-100 dark:bg-zinc-900`}>{children}</body>
+			<body
+				className={`${inter.className} dark:text-gray-100 dark:bg-zinc-900`}
+			>
+				{children}
+			</body>
 		</html>
 	);
 }
