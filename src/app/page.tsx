@@ -9,6 +9,12 @@ export default async function Home() {
 		redirect("/auth/login");
 	}
 
+	const orgs = await apiService.organization.list().catch(() => ({ data: [] }));
+
+	if (orgs.data.length === 0) {
+		redirect("/organizations/create");
+	}
+
 	return (
 		<main>
 			{user ? (
