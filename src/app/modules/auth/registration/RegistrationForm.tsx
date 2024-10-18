@@ -85,13 +85,13 @@ function RegistrationForm() {
 						<div className="block">
 							<Label htmlFor="firstName" value="First name" />
 						</div>
-						<TextFormInput id="firstName" name="firstName" placeholder="John" />
+						<TextFormInput id="firstName" name="first_name" placeholder="John" />
 					</div>
 					<div className="w-full">
 						<div className="block">
 							<Label htmlFor="lastName" value="Last name" />
 						</div>
-						<TextFormInput id="lastName" name="lastName" placeholder="Doe" />
+						<TextFormInput id="lastName" name="last_name" placeholder="Doe" />
 					</div>
 				</div>
 
