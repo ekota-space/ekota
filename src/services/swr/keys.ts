@@ -2,6 +2,8 @@ export const SwrQueryKeys = Object.freeze({
   useMe: '/user/me',
   useOrganizationList: '/organizations/list',
   useOrganizationGet: '/organizations/get',
+
+  useTeamList: '/organizations/team/list',
 });
 
 export const SwrMutationKeys = Object.freeze({

@@ -7,7 +7,7 @@ import { RiMessage3Fill, RiTeamLine } from "react-icons/ri";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import ChatsPanel from "../chats/ChatsPanel";
 import { useParams } from "next/navigation";
-import TeamsPanel from "../teams/TeamsPanel";
+import TeamsPanel from "../teams/panel/TeamsPanel";
 
 interface TabListItem {
 	href: string;
