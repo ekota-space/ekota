@@ -9,7 +9,8 @@
 			"recommended": true
 		},
     "ignore": [
-      "node_modules"
+      "node_modules",
+      "src/services/api/*.ts"
     ]
 	}
 }

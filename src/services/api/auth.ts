@@ -1,114 +1,90 @@
-import { isBrowser } from "@/utils/is-browser";
-import { Endpoint } from "./endpoint";
-import type { AxiosInstance } from "axios";
+/* eslint-disable */
+/* tslint:disable */
+/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
+ * ##                                                           ##
+ * ## AUTHOR: acacode                                           ##
+ * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
+ * ---------------------------------------------------------------
+ */
 
-export interface RegisterUserInput {
-	first_name: string;
-	last_name: string;
-	username: string;
-	email: string;
-	password: string;
-}
+import {
+  ApiAuthDaoAuthResponse,
+  ApiAuthDaoLoginDao,
+  ApiAuthDaoRegisterDao,
+  ApiResponseErrorResponseString,
+} from "./data-contracts";
+import { ContentType, HttpClient, RequestParams } from "./http-client";
 
-export interface LoginUserInput {
-	email: string;
-	password: string;
-}
+export class Auth<SecurityDataType = unknown> {
+  http: HttpClient<SecurityDataType>;
 
-export interface AuthResponse {
-	expirationDurationSeconds: number;
-}
+  constructor(http: HttpClient<SecurityDataType>) {
+    this.http = http;
+  }
 
-export default class AuthEndpoint extends Endpoint {
-	private timer: NodeJS.Timeout | null = null;
-
-	constructor(client: AxiosInstance) {
-		super(client);
-
-		this.onInit();
-	}
-
-	private async onInit() {
-		if (typeof window === "undefined") {
-			return;
-		}
-		const res = await this.refresh();
-		if (res.status === 400 && res.data?.expiresAtSeconds) {
-			const leftTimeMs = res.data.expiresAtSeconds * 1000 - Date.now();
-			this.refreshIn(leftTimeMs);
-		}
-	}
-
-	private refreshIn(durationMs: number): void {
-		if (this.timer) {
-			clearTimeout(this.timer);
-		}
-
-		this.timer = setTimeout(async () => {
-			const res = await this.refresh();
-
-			if (res.status === 200 && res.data?.expirationDurationSeconds) {
-				this.refreshPeriodically(res.data?.expirationDurationSeconds * 1000);
-			}
-		}, durationMs);
-	}
-
-	private refreshPeriodically(durationMs: number): void {
-		if (this.timer) {
-			clearInterval(this.timer);
-		}
-
-		this.timer = setInterval(() => {
-			this.refresh();
-		}, durationMs);
-	}
-
-	async refresh() {
-		const res = await this.client.get<
-			| { expiresAtSeconds?: number; expirationDurationSeconds?: number }
-			| undefined
-		>("/auth/refresh", {
-			validateStatus: (status) => {
-				return status === 200 || status === 400;
-			},
-			headers: await this.defaultHeaders(),
-		});
-		return res;
-	}
-
-	async logout() {
-		await this.client.get("/auth/logout", {
-			headers: await this.defaultHeaders(),
-		});
-	}
-
-	async updateGlobalHeaders() {
-		if (isBrowser()) return;
-		const headers = Object.fromEntries(
-			await import("next/headers").then((s) => s.headers().entries()),
-		);
-		this.client.defaults.headers.common = headers;
-	}
-
-	async login(data: LoginUserInput): Promise<void> {
-		const res = await this.client.post<AuthResponse>("/auth/login", data, {
-			validateStatus(status) {
-				return status === 200;
-			},
-		});
-
-		this.refreshPeriodically(res.data.expirationDurationSeconds * 1000);
-		await this.updateGlobalHeaders();
-	}
-
-	async register(data: RegisterUserInput): Promise<void> {
-		const res = await this.client.post<AuthResponse>("/auth/register", data, {
-			validateStatus(status) {
-				return status === 201;
-			},
-		});
-
-		this.refreshPeriodically(res.data.expirationDurationSeconds * 1000);
-		await this.updateGlobalHeaders();
-	}
+  /**
+   * @description User login route
+   *
+   * @tags Auth
+   * @name LoginCreate
+   * @summary Login user
+   * @request POST:/auth/login
+   */
+  loginCreate = (body: ApiAuthDaoLoginDao, params: RequestParams = {}) =>
+    this.http.request<ApiAuthDaoAuthResponse, ApiResponseErrorResponseString>({
+      path: `/auth/login`,
+      method: "POST",
+      body: body,
+      type: ContentType.Json,
+      format: "json",
+      ...params,
+    });
+  /**
+   * @description User logout route
+   *
+   * @tags Auth
+   * @name LogoutList
+   * @summary Logout user
+   * @request GET:/auth/logout
+   */
+  logoutList = (params: RequestParams = {}) =>
+    this.http.request<void, any>({
+      path: `/auth/logout`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Refresh access token route
+   *
+   * @tags Auth
+   * @name RefreshList
+   * @summary Refresh access token
+   * @request GET:/auth/refresh
+   */
+  refreshList = (params: RequestParams = {}) =>
+    this.http.request<ApiAuthDaoAuthResponse, ApiResponseErrorResponseString>({
+      path: `/auth/refresh`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+  /**
+   * @description User registration route
+   *
+   * @tags Auth
+   * @name RegisterCreate
+   * @summary Register user
+   * @request POST:/auth/register
+   */
+  registerCreate = (body: ApiAuthDaoRegisterDao, params: RequestParams = {}) =>
+    this.http.request<ApiAuthDaoAuthResponse, ApiResponseErrorResponseString>({
+      path: `/auth/register`,
+      method: "POST",
+      body: body,
+      type: ContentType.Json,
+      format: "json",
+      ...params,
+    });
 }

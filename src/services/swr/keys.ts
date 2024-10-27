@@ -9,4 +9,5 @@ export const SwrMutationKeys = Object.freeze({
   useAuthRegister: '/auth/register',
 
   useOrganizationCreate: "/organizations/create",
+  useTeamCreate: "/organizations/team/create",
 });

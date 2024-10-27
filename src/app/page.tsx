@@ -1,14 +1,17 @@
-import { apiService } from "@/services/api/api";
 import { redirect } from "next/navigation";
 import OrganizationList from "./modules/root/OrganizationList";
 import { Card } from "flowbite-react";
 import { FaBuilding } from "react-icons/fa6";
 import RootNavbar from "./modules/root/RootNavigation";
+import { apiService } from "@/services/api/api";
 
 export default async function Home() {
-	const orgs = await apiService.organization.list().catch(() => ({ data: [] }));
+	const orgs = await apiService.organizations
+		.organizationsList()
+		.then((res) => res.data.data)
+		.catch(() => []);
 
-	if (orgs.data.length === 0) {
+	if (orgs?.length === 0) {
 		redirect("/organizations/create");
 	}
 

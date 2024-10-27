@@ -7,7 +7,7 @@ import React from "react";
 
 function OrganizationNewPage() {
 	const { data } = useOrganizationList();
-	const hasOrgs = (data?.data.length ?? 0) > 0;
+	const hasOrgs = (data?.data?.length ?? 0) > 0;
 
 	return (
 		<main className="h-screen flex justify-center items-center">

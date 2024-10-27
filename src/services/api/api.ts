@@ -1,29 +1,24 @@
 import { Env } from "@/collections/env";
-import axios from "axios";
-import AuthEndpoint from "./auth";
-import UserEndpoint from "./user";
-import OrganizationEndpoint from "./organization";
+import { Auth } from "./Auth";
+import { HttpClient } from "./http-client";
+import { Organizations } from "./Organizations";
+import { User } from "./User";
 
 class ApiService {
-	auth!: AuthEndpoint;
-	user!: UserEndpoint;
-  organization!: OrganizationEndpoint;
+  auth: Auth;
+  user: User;
+  organizations: Organizations;
 
-	constructor() {
-		this.#onInit();
-	}
-
-	async #onInit(): Promise<void> {
-
-		const client = axios.create({
-			baseURL: Env.API_URI,
-			withCredentials: true,
-		});
-
-		this.auth = new AuthEndpoint(client);
-		this.user = new UserEndpoint(client);
-    this.organization = new OrganizationEndpoint(client);
-	}
+  constructor() {
+    const httpClient = new HttpClient({
+      baseURL: Env.API_URI,
+      withCredentials: true,
+      responseType: "json",
+    });
+    this.auth = new Auth(httpClient);
+    this.user = new User(httpClient);
+    this.organizations = new Organizations(httpClient);
+  }
 }
 
 export const apiService = new ApiService();

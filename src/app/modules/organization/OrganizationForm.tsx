@@ -41,10 +41,10 @@ function OrganizationForm() {
 
 			try {
 				await mutation.trigger({
-					name: data.name,
-					slug: data.slug,
-					description: data.description,
-					owner_id: me.data?.id,
+						name: data.name,
+						slug: data.slug,
+						description: data.description,
+						owner_id: me.data?.id,
 				});
 
 				router.push("/");
@@ -81,11 +81,7 @@ function OrganizationForm() {
 				<div className="mb-2 block">
 					<Label htmlFor="slug" value="Organization's Slug" />
 				</div>
-				<TextFormInput
-					id="slug"
-					name="slug"
-					placeholder="Unique short name"
-				/>
+				<TextFormInput id="slug" name="slug" placeholder="Unique short name" />
 
 				<div className="mb-2 block">
 					<Label htmlFor="description" value="Organization's Description" />

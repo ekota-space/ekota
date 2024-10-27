@@ -1,9 +1,9 @@
-import { apiService } from "@/services/api/api";
 import {
 	type NextRequest,
 	NextResponse,
 	type MiddlewareConfig,
 } from "next/server";
+import { apiService } from "./services/api/api";
 
 const openRoutes = ["/auth/login", "/auth/register"];
 
@@ -11,7 +11,11 @@ export default async function middleware(
 	req: NextRequest,
 ): Promise<NextResponse> {
 	const { pathname } = req.nextUrl;
-	const { data: user } = await apiService.user.me();
+	const {
+		data: { data: user },
+	} = await apiService.user.getUser({
+		validateStatus: (status) => status < 500,
+	});
 
 	if (!user && !openRoutes.includes(pathname)) {
 		req.nextUrl.pathname = "/auth/login";

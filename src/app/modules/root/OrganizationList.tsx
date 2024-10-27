@@ -12,7 +12,7 @@ function OrganizationList() {
 
 	return (
 		<List unstyled className="">
-			{data?.data.map((org) => (
+			{data?.data?.map((org) => (
 				<List.Item
 					key={org.id}
 					className="p-2 pb-3 sm:pb-4 hover:bg-zinc-50 active:bg-slate-100 dark:hover:bg-zinc-700 dark:active:bg-zinc-800 transition-colors rounded-lg"
@@ -25,7 +25,7 @@ function OrganizationList() {
 									size="md"
 									rounded
 									placeholderInitials={org.name
-										.split(" ")
+										?.split(" ")
 										.map((n) => n[0])
 										.join("")}
 								/>

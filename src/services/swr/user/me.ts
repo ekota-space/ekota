@@ -1,13 +1,10 @@
 import useSWR from "swr";
 import { SwrQueryKeys } from "../keys";
 import { apiService } from "@/services/api/api";
-import type { ApiUser } from "@/models/api/user";
+import type { ApiModelUsers } from "@/services/api/data-contracts";
 
 export default function useMe() {
-	return useSWR<ApiUser>(SwrQueryKeys.useMe, async () => {
-		const res = await apiService.user.me();
-		if (res.error) throw res.error;
-
-		return res.data as ApiUser;
+	return useSWR<ApiModelUsers>(SwrQueryKeys.useMe, async () => {
+		return await apiService.user.getUser().then((res) => res.data.data as ApiModelUsers);
 	});
 }

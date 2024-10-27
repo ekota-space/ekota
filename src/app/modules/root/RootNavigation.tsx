@@ -1,4 +1,5 @@
 "use client";
+
 import { apiService } from "@/services/api/api";
 import useMe from "@/services/swr/user/me";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
@@ -26,7 +27,7 @@ export default function RootNavbar() {
 							alt="Profile Picture"
 							img=""
 							placeholderInitials={
-								(me.data?.first_name[0] ?? "") + (me.data?.last_name[0] ?? "")
+								(me.data?.first_name?.[0] ?? "") + (me.data?.last_name?.[0] ?? "")
 							}
 							rounded
 						/>
@@ -48,7 +49,7 @@ export default function RootNavbar() {
 					<Dropdown.Divider />
 					<Dropdown.Item
 						onClick={async () => {
-							await apiService.auth.logout();
+							await apiService.auth.logoutList();
 							router.replace("/auth/login");
 						}}
 					>

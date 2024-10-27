@@ -6,7 +6,8 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "npx @biomejs/biome lint"
+    "lint": "npx @biomejs/biome lint",
+    "gen-api": "npx swagger-typescript-api -p ../zero/docs/swagger.json -o src/services/api --api-class-name ApiService --axios --modular --sort-routes --sort-types --single-http-client --type-prefix Api"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

@@ -1,12 +1,17 @@
 import RegistrationForm from "@/app/modules/auth/registration/RegistrationForm";
 import { apiService } from "@/services/api/api";
+
 import { Card } from "flowbite-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
 async function RegisterPage() {
-	const { data: user } = await apiService.user.me();
+	const {
+		data: { data: user },
+	} = await apiService.user.getUser({
+		validateStatus: (status) => status < 500,
+	});
 
 	if (user) {
 		redirect("/");

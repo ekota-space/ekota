@@ -1,18 +1,38 @@
-import type { ApiUser } from "@/models/api/user";
-import { Endpoint } from "./endpoint";
-import type { AxiosError } from "axios";
+/* eslint-disable */
+/* tslint:disable */
+/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
+ * ##                                                           ##
+ * ## AUTHOR: acacode                                           ##
+ * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
+ * ---------------------------------------------------------------
+ */
 
-export default class UserEndpoint extends Endpoint {
-	async me(): Promise<{ data?: ApiUser; error?: AxiosError }> {
-		try {
-			const res = await this.client.get<ApiUser>("/user/me", {
-				validateStatus: (status) => status === 200,
-        headers: await this.defaultHeaders(),
-			});
+import { ApiResponseErrorResponseString, ApiResponseSuccessDataResponseModelUsers } from "./data-contracts";
+import { ContentType, HttpClient, RequestParams } from "./http-client";
 
-			return { data: res.data };
-		} catch (error) {
-			return { error: error as AxiosError };
-		}
-	}
+export class User<SecurityDataType = unknown> {
+  http: HttpClient<SecurityDataType>;
+
+  constructor(http: HttpClient<SecurityDataType>) {
+    this.http = http;
+  }
+
+  /**
+   * @description Get user info
+   *
+   * @tags User
+   * @name GetUser
+   * @summary Get user info
+   * @request GET:/user/me
+   */
+  getUser = (params: RequestParams = {}) =>
+    this.http.request<ApiResponseSuccessDataResponseModelUsers, ApiResponseErrorResponseString>({
+      path: `/user/me`,
+      method: "GET",
+      type: ContentType.Json,
+      format: "json",
+      ...params,
+    });
 }
