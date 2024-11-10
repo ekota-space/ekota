@@ -4,6 +4,7 @@ import type {
 	AuthError,
 	AuthResponse,
 } from "@supabase/supabase-js";
+import session from "./session";
 
 export const useSignupKey = ["signup"];
 export function useSignup() {
@@ -20,6 +21,9 @@ export function useSignup() {
 					password: data.password,
 				});
 			},
+      onSuccess(data) {
+          session.setSession(data.data.session);
+      },
 		};
 	});
 }

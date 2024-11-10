@@ -4,6 +4,7 @@ import type {
 	AuthError,
 	AuthTokenResponsePassword,
 } from "@supabase/supabase-js";
+import session from "./session";
 
 export const useLoginKey = ["login"];
 export function useLogin() {
@@ -20,6 +21,9 @@ export function useLogin() {
 					password: data.password,
 				});
 			},
+      onSuccess(data) {
+          session.setSession(data.data.session);
+      },
 		};
 	});
 }

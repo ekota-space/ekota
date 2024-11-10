@@ -1,8 +1,10 @@
-import { createForm, valiForm } from "@modular-forms/solid";
+import { createForm, FormError, valiForm } from "@modular-forms/solid";
 import * as v from "valibot";
 
 import { Button } from "~/components/ui/button";
 import { FormTextField } from "~/components/form/text-field";
+import { useSignup } from "~/lib/services/supabase/auth/use-signup";
+import { useNavigate } from "@solidjs/router";
 
 const SignupFormSchema = v.pipe(
 	v.object({
@@ -37,12 +39,26 @@ const SignupForm = () => {
 	const [signupForm, { Form, Field }] = createForm<SignupFormValues>({
 		validate: valiForm(SignupFormSchema),
 	});
+	const signup = useSignup();
+  const navigate = useNavigate()
 
 	return (
 		<Form
 			class="flex flex-col space-y-3 p-4"
-			onSubmit={(data) => {
-				console.log(data);
+			onSubmit={async (input) => {
+				const { data, error } = await signup.mutateAsync({
+					email: input.email,
+					password: input.password,
+				});
+
+        // TODO implement existing email/username error
+				if (error) {
+					throw new FormError<SignupFormValues>({
+						email: "Email already exists",
+					});
+				}
+
+        navigate("/")
 			}}
 		>
 			<div class="flex gap-2">

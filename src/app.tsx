@@ -6,7 +6,7 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
-import { Suspense } from "solid-js";
+import { onMount, Suspense } from "solid-js";
 
 import { isServer } from "solid-js/web";
 
@@ -17,6 +17,7 @@ import {
 } from "@kobalte/core";
 import { getCookie } from "vinxi/http";
 import { ModeToggle } from "./components/modules/root/color-mode";
+import { startSession } from "./lib/services/supabase/auth/session";
 
 function getServerCookies() {
 	"use server";
@@ -38,6 +39,10 @@ export default function App() {
 		},
 	});
 
+	onMount(() => {
+		startSession();
+	});
+
 	return (
 		<QueryClientProvider client={queryClient}>
 			<SolidQueryDevtools initialIsOpen={false} />
@@ -47,7 +52,8 @@ export default function App() {
 						<Title>Ekota | Collaborate as a team</Title>
 						<ColorModeScript storageType={storageManager.type} />
 						<ColorModeProvider storageManager={storageManager}>
-              <ModeToggle/>
+							<ModeToggle />
+
 							<Suspense>{props.children}</Suspense>
 						</ColorModeProvider>
 					</MetaProvider>
