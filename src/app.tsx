@@ -1,19 +1,22 @@
+import "./app.css";
+import "@fontsource/inter";
+
 import { MetaProvider, Title } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 
 export default function App() {
-  return (
-    <Router
-      root={props => (
-        <MetaProvider>
-          <Title>SolidStart - with Vitest</Title>
-          <Suspense>{props.children}</Suspense>
-        </MetaProvider>
-      )}
-    >
-      <FileRoutes />
-    </Router>
-  );
+	return (
+		<Router
+			root={(props) => (
+				<MetaProvider>
+					<Title>Ekota | Collaborate as a team</Title>
+					<Suspense>{props.children}</Suspense>
+				</MetaProvider>
+			)}
+		>
+			<FileRoutes />
+		</Router>
+	);
 }
