@@ -1,7 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-[data-testid="right-icon"] {
-    pointer-events: unset;
-}
