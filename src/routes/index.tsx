@@ -6,7 +6,7 @@ export default function Home() {
 	const navigate = useNavigate();
 
 	createEffect(() => {
-		if (!session.session()) {
+		if (!session.session()?.user) {
 			navigate("/auth/login");
 		}
 	});

@@ -139,3 +139,7 @@
 ::-webkit-scrollbar-corner {
   display: none;
 }
+
+a {
+  @apply text-blue-500 hover:underline;
+}

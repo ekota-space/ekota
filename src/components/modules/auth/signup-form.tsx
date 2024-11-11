@@ -5,6 +5,7 @@ import { Button } from "~/components/ui/button";
 import { FormTextField } from "~/components/form/text-field";
 import { useSignup } from "~/lib/services/supabase/auth/use-signup";
 import { useNavigate } from "@solidjs/router";
+import { useProfileCreate } from "~/lib/services/supabase/profile/use-create";
 
 const SignupFormSchema = v.pipe(
 	v.object({
@@ -40,7 +41,8 @@ const SignupForm = () => {
 		validate: valiForm(SignupFormSchema),
 	});
 	const signup = useSignup();
-  const navigate = useNavigate()
+	const profileCreate = useProfileCreate();
+	const navigate = useNavigate();
 
 	return (
 		<Form
@@ -51,14 +53,20 @@ const SignupForm = () => {
 					password: input.password,
 				});
 
-        // TODO implement existing email/username error
+				// TODO implement existing email/username error
 				if (error) {
 					throw new FormError<SignupFormValues>({
 						email: "Email already exists",
 					});
 				}
 
-        navigate("/")
+				await profileCreate.mutateAsync({
+					firstName: input.firstName,
+					lastName: input.lastName,
+					username: input.username,
+				});
+
+				navigate("/");
 			}}
 		>
 			<div class="flex gap-2">
