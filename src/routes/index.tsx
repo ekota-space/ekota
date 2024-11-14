@@ -1,18 +1,9 @@
-import { useNavigate } from "@solidjs/router";
-import { createEffect } from "solid-js";
 import OrgListView from "~/components/modules/root/org-list-view";
-import session from "~/lib/services/supabase/auth/session";
 import { BiSolidInstitution } from "solid-icons/bi";
 import { Card } from "~/components/ui/card";
 
 export default function Home() {
-	const navigate = useNavigate();
-
-	createEffect(() => {
-		if (!session.session()?.user) {
-			navigate("/auth/login");
-		}
-	});
+	
 
 	return (
 		<main class="flex h-screen justify-center items-center">

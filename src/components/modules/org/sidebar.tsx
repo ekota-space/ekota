@@ -28,7 +28,7 @@ const items = [
 ];
 
 function OrganizationSidebar() {
-	const { data: org } = useOrgGet();
+	const organization = useOrgGet();
 	const [expanded, setExpanded] = createSignal(true);
 
 	return (
@@ -40,10 +40,12 @@ function OrganizationSidebar() {
 			<div class="flex justify-between">
 				<div class="flex gap-2 items-center">
 					<Avatar>
-						<AvatarFallback>{org?.name?.slice(0, 1)}</AvatarFallback>
+						<AvatarFallback>
+							{organization.data?.name?.slice(0, 1)}
+						</AvatarFallback>
 					</Avatar>
 					<Show when={expanded()}>
-						<h2>{org?.name}</h2>
+						<h2>{organization.data?.name}</h2>
 					</Show>
 				</div>
 				<Show when={expanded()}>
@@ -77,7 +79,7 @@ function OrganizationSidebar() {
 					{(item) => {
 						const location = useLocation();
 						const Icon = item.icon;
-						const href = `/org/${org?.slug}/${item.path}`;
+						const href = `/org/${organization.data?.slug}/${item.path}`;
 
 						const [currentPath, setCurrentPath] = createSignal(
 							location.pathname,
