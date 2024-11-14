@@ -37,6 +37,7 @@
     "@tanstack/solid-query-devtools": "^5.59.20",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cmdk-solid": "^1.1.0",
     "solid-icons": "^1.1.0",
     "solid-motionone": "^1.0.2",
     "tailwind-merge": "^2.5.4",
