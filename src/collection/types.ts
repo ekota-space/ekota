@@ -34,7 +34,114 @@ export type Database = {
   }
   public: {
     Tables: {
-      Profile: {
+      OrganizationAdmins: {
+        Row: {
+          createdAt: string
+          id: string
+          organizationId: string
+          profileId: string
+        }
+        Insert: {
+          createdAt?: string
+          id?: string
+          organizationId: string
+          profileId: string
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          organizationId?: string
+          profileId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "OrganizationAdmins_organizationId_fkey"
+            columns: ["organizationId"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "OrganizationAdmins_profileId_fkey"
+            columns: ["profileId"]
+            isOneToOne: false
+            referencedRelation: "Profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      OrganizationMembers: {
+        Row: {
+          createdAt: string
+          id: string
+          organizationId: string
+          profileId: string
+        }
+        Insert: {
+          createdAt?: string
+          id?: string
+          organizationId: string
+          profileId: string
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          organizationId?: string
+          profileId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "OrganizationMembers_organizationId_fkey"
+            columns: ["organizationId"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "OrganizationMembers_profileId_fkey"
+            columns: ["profileId"]
+            isOneToOne: false
+            referencedRelation: "Profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Organizations: {
+        Row: {
+          createdAt: string
+          description: string | null
+          id: string
+          name: string
+          ownerId: string
+          slug: string
+        }
+        Insert: {
+          createdAt?: string
+          description?: string | null
+          id?: string
+          name: string
+          ownerId: string
+          slug: string
+        }
+        Update: {
+          createdAt?: string
+          description?: string | null
+          id?: string
+          name?: string
+          ownerId?: string
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Organization_ownerId_fkey"
+            columns: ["ownerId"]
+            isOneToOne: false
+            referencedRelation: "Profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Profiles: {
         Row: {
           createdAt: string
           firstName: string
@@ -61,12 +168,86 @@ export type Database = {
         }
         Relationships: []
       }
+      ProjectManagers: {
+        Row: {
+          createdAt: string
+          id: string
+          profileId: string
+          projectId: string
+        }
+        Insert: {
+          createdAt?: string
+          id?: string
+          profileId: string
+          projectId: string
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          profileId?: string
+          projectId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ProjectManagers_profileId_fkey"
+            columns: ["profileId"]
+            isOneToOne: false
+            referencedRelation: "Profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ProjectManagers_projectId_fkey"
+            columns: ["projectId"]
+            isOneToOne: false
+            referencedRelation: "Projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Projects: {
+        Row: {
+          createdAt: string
+          description: string | null
+          id: string
+          name: string
+          organizationId: string
+          slug: string
+        }
+        Insert: {
+          createdAt?: string
+          description?: string | null
+          id?: string
+          name: string
+          organizationId: string
+          slug: string
+        }
+        Update: {
+          createdAt?: string
+          description?: string | null
+          id?: string
+          name?: string
+          organizationId?: string
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Projects_organizationId_fkey"
+            columns: ["organizationId"]
+            isOneToOne: false
+            referencedRelation: "Organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_profile_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

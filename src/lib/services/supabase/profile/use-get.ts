@@ -1,29 +1,40 @@
 import { createQuery } from "@tanstack/solid-query";
 import type { Database } from "~/collection/types";
 import supabase from "../supabase";
-import session from "../auth/session";
 import type { PostgrestError } from "@supabase/supabase-js";
 
-export type SupabaseProfileRow = Database["public"]["Tables"]["Profile"]["Row"];
+export type SupabaseProfileRow =
+	Database["public"]["Tables"]["Profiles"]["Row"];
 export const useProfileGetKey = ["get-profile"];
 
 export function useProfileGet() {
-	return createQuery<SupabaseProfileRow, PostgrestError>(() => {
+	const query =  createQuery<SupabaseProfileRow, PostgrestError>(() => {
 		return {
 			queryKey: useProfileGetKey,
 			queryFn: async () => {
+				const {
+					data: { user },
+          error
+				} = await supabase.auth.getUser();
+
+				if (!user || error) {
+					return Promise.reject(`User not found: ${error}`);
+				}
+
 				const res = await supabase
-					.from("Profile")
+					.from("Profiles")
 					.select("*")
-					.eq("userId", session.session()?.user.id as string)
+					.eq("userId", user.id)
 					.single();
 
 				if (res.error) {
-					throw res.error;
+					return Promise.reject(res.error);
 				}
 
 				return res.data;
 			},
 		};
 	});
+
+  return query;
 }

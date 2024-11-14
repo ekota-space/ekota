@@ -6,7 +6,7 @@ import supabase from "../supabase";
 import { useProfileGetKey } from "./use-get";
 
 export type SupabaseProfileInsert =
-	Database["public"]["Tables"]["Profile"]["Insert"];
+	Database["public"]["Tables"]["Profiles"]["Insert"];
 export const useProfileCreateKey = ["create-profile"];
 
 export function useProfileCreate() {
@@ -20,7 +20,7 @@ export function useProfileCreate() {
 		return {
 			mutationKey: useProfileCreateKey,
 			mutationFn: async (profile) => {
-				const res = await supabase.from("Profile").insert({
+				const res = await supabase.from("Profiles").insert({
 					...profile,
 					userId: session.session()?.user.id as string,
 				});

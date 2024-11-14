@@ -1,6 +1,9 @@
 import { useNavigate } from "@solidjs/router";
 import { createEffect } from "solid-js";
+import OrgListView from "~/components/modules/root/org-list-view";
 import session from "~/lib/services/supabase/auth/session";
+import { BiSolidInstitution } from "solid-icons/bi";
+import { Card } from "~/components/ui/card";
 
 export default function Home() {
 	const navigate = useNavigate();
@@ -12,8 +15,16 @@ export default function Home() {
 	});
 
 	return (
-		<main>
-			<h1>Hello world!</h1>
+		<main class="flex h-screen justify-center items-center">
+			<Card class="p-4 space-y-4">
+				<h3 class="text-2xl">
+					<span class="mr-2">
+						<BiSolidInstitution class="inline-block" />
+					</span>
+					Organizations
+				</h3>
+				<OrgListView />
+			</Card>
 		</main>
 	);
 }

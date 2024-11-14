@@ -40,7 +40,7 @@ export default function App() {
 	});
 
 	onMount(() => {
-		startSession();
+		startSession(queryClient);
 	});
 
 	return (
