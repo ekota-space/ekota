@@ -1,7 +1,8 @@
+import { useLocation } from "@solidjs/router";
 import clsx from "clsx";
 import { BsChat, BsGrid1x2, BsSquareHalf } from "solid-icons/bs";
 import { TbUsersGroup } from "solid-icons/tb";
-import { createSignal, For, Show } from "solid-js";
+import { createEffect, createSignal, For, Show } from "solid-js";
 import { Motion } from "solid-motionone";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -47,6 +48,7 @@ function OrganizationSidebar() {
 				</div>
 				<Show when={expanded()}>
 					<Button
+						title="Collapse Sidebar"
 						variant="ghost"
 						onClick={() => {
 							setExpanded(!expanded());
@@ -59,6 +61,7 @@ function OrganizationSidebar() {
 
 			<Show when={!expanded()}>
 				<Button
+					title="Expand Sidebar"
 					variant="ghost"
 					onClick={() => {
 						setExpanded(!expanded());
@@ -72,8 +75,17 @@ function OrganizationSidebar() {
 			<div class="flex flex-col gap-1">
 				<For each={items}>
 					{(item) => {
+						const location = useLocation();
 						const Icon = item.icon;
 						const href = `/org/${org?.slug}/${item.path}`;
+
+						const [currentPath, setCurrentPath] = createSignal(
+							location.pathname,
+						);
+
+						createEffect(() => {
+							setCurrentPath(location.pathname);
+						});
 
 						return (
 							<Show
@@ -83,14 +95,15 @@ function OrganizationSidebar() {
 										variant="ghost"
 										as="a"
 										href={href}
-										class="text-foreground"
+										class={`text-foreground ${currentPath().startsWith(href) ? "bg-primary/20" : ""}`}
+										title={item.name}
 									>
 										<Icon />
 									</Button>
 								}
 							>
 								<a
-									class="flex items-center gap-2 text-foreground px-5 py-2 hover:bg-primary/20 rounded-lg"
+									class={`flex items-center gap-2 text-foreground px-5 py-2 transition-colors hover:bg-primary/20 hover:no-underline rounded-lg ${currentPath().startsWith(href) ? "bg-primary/20" : ""}`}
 									href={href}
 								>
 									<span>
