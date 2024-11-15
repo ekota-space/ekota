@@ -1,19 +1,33 @@
-import { useLocation } from "@solidjs/router";
-import clsx from "clsx";
+import { useLocation, useParams } from "@solidjs/router";
 import { BsChat, BsGrid1x2, BsSquareHalf } from "solid-icons/bs";
 import { TbUsersGroup } from "solid-icons/tb";
 import { createEffect, createSignal, For, Show } from "solid-js";
+import { clientOnly } from "@solidjs/start";
 import { Motion } from "solid-motionone";
+
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { useOrgGet } from "~/lib/services/supabase/org/use-get";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "~/components/ui/accordion";
+import OrganizationSidebarItem from "./sidebar-item";
+import OrganizationProjectRightActions from "../project/sidebar/right-actions";
+import OrganizationNestedProjects from "../project/sidebar/nested-projects";
+
+
 
 const items = [
 	{
 		name: "Projects",
 		path: "projects",
 		icon: BsGrid1x2,
+		children: OrganizationNestedProjects,
+		actions: OrganizationProjectRightActions,
 	},
 	{
 		name: "Teams",
@@ -78,8 +92,8 @@ function OrganizationSidebar() {
 				<For each={items}>
 					{(item) => {
 						const location = useLocation();
-						const Icon = item.icon;
-						const href = `/org/${organization.data?.slug}/${item.path}`;
+						const { slug } = useParams<{ slug: string }>();
+						const href = `/org/${slug}/${item.path}`;
 
 						const [currentPath, setCurrentPath] = createSignal(
 							location.pathname,
@@ -89,31 +103,41 @@ function OrganizationSidebar() {
 							setCurrentPath(location.pathname);
 						});
 
+						const ItemChildren = item.children;
+						const Actions = item.actions ?? (() => <></>);
+
+						if (ItemChildren) {
+							return (
+								<Accordion multiple={false} collapsible value={["item-1"]}>
+									<AccordionItem value="item-1" class="border-none">
+										<div class="flex items-center">
+											<AccordionTrigger>
+												<OrganizationSidebarItem
+													name={item.name}
+													expanded={expanded()}
+													href=""
+													icon={item.icon}
+													isActive={false}
+												/>
+											</AccordionTrigger>
+											<Actions />
+										</div>
+										<AccordionContent>
+											<ItemChildren />
+										</AccordionContent>
+									</AccordionItem>
+								</Accordion>
+							);
+						}
+
 						return (
-							<Show
-								when={expanded()}
-								fallback={
-									<Button
-										variant="ghost"
-										as="a"
-										href={href}
-										class={`text-foreground ${currentPath().startsWith(href) ? "bg-primary/20" : ""}`}
-										title={item.name}
-									>
-										<Icon />
-									</Button>
-								}
-							>
-								<a
-									class={`flex items-center gap-2 text-foreground px-5 py-2 transition-colors hover:bg-primary/20 hover:no-underline rounded-lg ${currentPath().startsWith(href) ? "bg-primary/20" : ""}`}
-									href={href}
-								>
-									<span>
-										<Icon />
-									</span>
-									<span>{item.name}</span>
-								</a>
-							</Show>
+							<OrganizationSidebarItem
+								name={item.name}
+								expanded={expanded()}
+								href={href}
+								icon={item.icon}
+								isActive={currentPath().startsWith(href)}
+							/>
 						);
 					}}
 				</For>

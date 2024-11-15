@@ -5,7 +5,7 @@ import type { PostgrestError } from "@supabase/supabase-js";
 import type { SupabaseOrganizationRow } from "./use-list";
 import { useParams } from "@solidjs/router";
 
-export const useOrgGetKey = (orgId: string) => ["org-get", orgId];
+export const useOrgGetKey = (slug: string) => ["org-get", slug];
 
 export function useOrgGet() {
 	const { slug } = useParams<{ slug: string }>();
